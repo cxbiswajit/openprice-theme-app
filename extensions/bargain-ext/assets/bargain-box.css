@@ -1,0 +1,159 @@
+.bargain-buy-button{
+  border-radius: 20px;
+  background-color: #1976d2;
+}
+
+.bargain-buy-button:after{
+  box-shadow: none;
+}
+
+.bargain-buy-button:hover{
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 1); /* Fully opaque border color on hover */
+}
+/* Hidden container for the modal */
+.modal-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -300px; /* Starts off-screen to the right */
+  height: 100%;
+  background-color: #ffffff; /* Updated to white */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 99999;
+  width: 398px;
+}
+
+/* Animation for sliding the modal into view */
+.modal-container.open {
+  display: flex;
+  flex-direction: column;
+  right: 0;
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e6eb;
+  padding: 0px 16px 10px 16px;
+}
+
+.chatbot-body {
+  padding: 16px;
+}
+.close-icon {
+  color: #000;
+  font-size: 31px;
+  margin-right: 8px;
+}
+
+.close-icon:hover {
+  color: #666666;
+}
+
+.chatbot-logo{
+  margin-top: 12px;
+  align-items: center;
+  display: flex;
+}
+
+.chatbot-name{
+  color: black;
+  font-size: 1.7rem;
+}
+
+.chatbot-body-wrapper {
+  overflow-y: auto;
+  flex-direction: column-reverse;
+  display: flex;
+  flex-grow: 1;
+  margin-top: auto;
+}
+
+.message-wrapper{
+  display: flex;
+}
+.bot-message {
+  align-items: center;
+  display: inline-flex;
+  margin: 8px;
+  line-height: 24px;
+  padding: 8px 16px;
+  background-color: #f6f7f9;
+  color: #292b3a;
+  border-radius: 16px 16px 16px 0px; /* Rounded corners for the user input box */
+  max-width: 320px;
+  font-size: 1.6rem;
+}
+
+.user-message {
+  align-items: center;
+  display: inline-flex;
+  margin: 8px 40px 8px 8px;
+  line-height: 24px;
+  padding: 8px 16px;
+  background-color: #fff;
+  border: 1px solid #e0e6eb;
+  border-radius: 16px 16px 0px 16px; /* Rounded corners for the user input box */
+  max-width: 320px;
+  font-size: 1.6rem;
+}
+
+.chatbot-footer {
+  display: block;
+  box-sizing: content-box;
+  padding: 16px;
+  padding-bottom: max(env(safe-area-inset-bottom),16px);
+  margin-top: auto;
+
+}
+
+.chatbot-input-form{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.chatbot-input-form input[type="text"] {
+  flex-grow: 1;
+  padding: 9px 16px;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 20px;
+  background-color: #fff; /* Match background color of user message */
+  font-size: 1.5rem;
+  outline: none;
+}
+
+.chatbot-input-form button {
+  border: 0;
+  border-radius: 0px;
+  cursor: pointer;
+  margin-bottom: 9px;
+  margin-left: 16px;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+}
+/* Add this to your CSS */
+.powered-by {
+  text-align: center; /* Align the text to the center */
+  margin-bottom: 8px;
+  color: #888; /* Change the color to your preferred color */
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+.marketing{
+  font-weight: bold; 
+  color: #1976d2;
+}
+
+
+
+/* Mobile Styles */
+@media (max-width: 600px) {
+  .modal-container {
+    width: 100%; /* Adjust the modal width for smaller screens */
+  }
+
+}
