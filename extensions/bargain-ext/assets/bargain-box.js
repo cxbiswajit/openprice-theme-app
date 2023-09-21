@@ -25,6 +25,27 @@
     while (chatBody.firstChild) {
       chatBody.removeChild(chatBody.firstChild);
     }
+
+    var userInputContainer = selectElement(".chatbot-input-form");
+    if (userInputContainer) {
+      userInputContainer.style.display = "flex";
+    }
+
+    // Clear the input field
+    var buttons = selectElement(".button-container");
+    if (buttons) {
+      buttons.remove(); 
+    }
+
+    var userInputContainer = selectElement(".discount-text");
+    if (userInputContainer) {
+      userInputContainer.style.display = "none";
+    }
+    var userInputContainer = selectElement(".discount");
+    if (userInputContainer) {
+      userInputContainer.style.display = "none";
+    }
+
   }
 
   function selectElement(selector, node) {
@@ -52,7 +73,19 @@
         // Now 'botResponses' is an array of bot responses
         botResponses.forEach(function(response) {
           console.log('Received bot response:', response);
-          updateChatWindow(response, false); // false to indicate it's a received message
+          if (response.includes("Are you ok with")) {
+            // If the bot message contains the specific question
+            replaceWithYesNoButtons();
+            updateChatWindow(response, false); // false to indicate it's a received message
+          }
+          else if (response.includes("discount")) {
+            // If the bot message contains the specific question
+            displayDiscount(response); // false to indicate it's a received message
+          }
+          else {
+            // For other messages, update the chat window
+            updateChatWindow(response, false); // false to indicate it's a received message
+          }
         });
         // Scroll to the last message
         var chatBody = selectElement(".chatbot-body");
@@ -103,7 +136,7 @@
     if (userInput) {
       userInput.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-          sendMessage();
+          sendMessage(event);
         }
       });
     }
@@ -144,6 +177,41 @@
 
     // Clear the input field
     userInput.value = "";
+
+  }
+
+  function sendYesNoMessage(message) {
+  
+    // Update the chat window with the user message
+    updateChatWindow(message, true); // true to indicate it's a user message
+
+    if (!userSessionId) {
+      // If userSessionId is not set, create a new session for the user
+      userSessionId = generateSessionId();
+    }
+
+    // Set the user session ID in the headers
+    var headers = { "userSessionId": userSessionId };
+
+    // Create an object representing the message format
+    var messageObject = {
+      sender: userSessionId, 
+      isInitiate: false,  
+      productId: "ABC12",  
+      content: message 
+    };
+
+    // Convert the message object to a JSON string
+    var jsonString = JSON.stringify(messageObject);
+
+    // Send the user message to the WebSocket server using STOMP
+    stompClient.send('/app/msg', headers, jsonString);
+
+    // Clear the input field
+    var buttons = selectElement(".button-container");
+    if (buttons) {
+      buttons.style.display = "none";
+    }
 
   }
 
@@ -212,6 +280,82 @@
       disconnect();
     });
   }
+
+  // Function to replace user input and send button with yes and no buttons
+  function replaceWithYesNoButtons() {
+    var userInputContainer = selectElement(".chatbot-input-form");
+    if (userInputContainer) {
+      userInputContainer.style.display = "none";
+    }
+
+    var buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("button-container");
+
+    var yesButton = document.createElement("button");
+    yesButton.textContent = "Yes";
+    yesButton.classList.add("yes-button");
+    yesButton.addEventListener("click", function () {
+      sendYesNoMessage("Yes");
+    });
+
+    var noButton = document.createElement("button");
+    noButton.textContent = "No";
+    noButton.classList.add("no-button");
+    noButton.addEventListener("click", function () {
+      sendYesNoMessage("No");
+    });
+
+    buttonContainer.appendChild(yesButton);
+    buttonContainer.appendChild(noButton);
+
+    var parrent = selectElement(".chatbot-footer");
+    parrent.appendChild(buttonContainer);
+  }
+
+  function displayDiscount(response) {
+    var msg = calculatePercentageFromString(response);
+    
+    var discountText = selectElement(".discount-text");
+    if (discountText) {
+      discountText.style.display = "flex";
+      discountText.textContent = msg;
+    }
+    var userInputContainer = selectElement(".discount");
+    if (userInputContainer) {
+      userInputContainer.style.display = "flex";
+    }
+
+    var userInputContainer = selectElement(".chatbot-input-form");
+    if (userInputContainer) {
+      userInputContainer.style.display = "none";
+    }
+  }
+  
+
+  function calculatePercentageFromString(input) {
+    // Split the input string into an array using ":" as the delimiter
+    const values = input.split(':');
+  
+    // Check if there are exactly three values in the array
+    if (values.length !== 3) {
+      return "Invalid input format. Please provide input in the format 'discount:part:whole'.";
+    }
+  
+    // Parse the values as numbers
+    const discount = parseFloat(values[1]);
+    const actualPrice = parseFloat(values[2]);
+  
+    // Check if parsing was successful
+    if (isNaN(discount) || isNaN(actualPrice)) {
+      return "Invalid numeric values. Please provide valid numbers.";
+    }
+  
+    // Calculate the discount percentage
+    const discountPercentage = Math.round(((actualPrice - discount) / actualPrice) * 100);
+  
+    return `You got ${discountPercentage}% OFF`; // Display with two decimal places
+  }
   
   document.body.appendChild(modal);
 })();
+

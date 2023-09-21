@@ -101,18 +101,18 @@
 }
 
 .chatbot-footer {
-  display: block;
-  box-sizing: content-box;
+  display: flex;
   padding: 16px;
   padding-bottom: max(env(safe-area-inset-bottom),16px);
   margin-top: auto;
-
+  justify-content: center;
 }
 
 .chatbot-input-form{
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  width: 100%;
 }
 
 .chatbot-input-form input[type="text"] {
@@ -130,7 +130,7 @@
   border-radius: 0px;
   cursor: pointer;
   margin-bottom: 9px;
-  margin-left: 16px;
+  margin-right: 24px;
   background-color: transparent;
   width: 24px;
   height: 24px;
@@ -147,8 +147,43 @@
   font-weight: bold; 
   color: #1976d2;
 }
+.yes-button{
+  flex-grow: 1;
+  padding: 9px 16px;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 20px;
+  background-color: #fff; /* Match background color of user message */
+  font-size: 1.5rem;
+  outline: none;
+  margin-right: 10px;
+}
 
+.no-button{
+  flex-grow: 1;
+  padding: 9px 16px;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 20px;
+  background-color: #fff; /* Match background color of user message */
+  font-size: 1.5rem;
+  outline: none;
+}
 
+.button-container{
+  display: flex;
+  width: 50%;
+}
+
+.discount{
+  display: none;
+  justify-content: center
+}
+
+.discount-text{
+  display: none;
+  justify-content: center;
+  margin-bottom: 29px;
+  font-size: 1.61em;
+}
 
 /* Mobile Styles */
 @media (max-width: 600px) {
